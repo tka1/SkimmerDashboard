@@ -1,0 +1,211 @@
+html, body {
+	margin: 3;
+   	padding: 3;
+	width: 95%;
+	height: 100%; 
+    background-color: #ebf4f9;
+   
+}
+
+ .topH1 {
+    color: #e5e9ef;
+        text-align: center;
+    } s
+
+.content {
+    position: relative;
+    background-color: #ffffff;
+    margin: 0 auto;
+    width: 960px;
+    height:100%;
+}
+
+.header {
+	height:80px;
+    background:#1973ed;
+    border:1px solid #CCC;
+    border-top-left-radius: 7px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 8px;
+    width:960px;
+    margin:0px auto;
+
+}
+
+.stuff {
+    overflow-x:auto;
+    background-color: #ffffff;
+    top:90px;
+    left:0;right:0;
+    bottom:0;
+    position:absolute;
+}
+
+
+.htable {
+    width:900px;
+}
+
+.tftable {
+    
+    font-size:14px;
+    color:#333333;
+    width:90%;
+    border-width: 1px;
+    border-color: #729ea5;
+    border-collapse: collapse;
+}
+.tftable th {
+    font-size:14px;
+    background-color:#acc8cc;
+    border-width: 1px
+        ;padding: 8px;
+    border-style: solid;
+    border-color: #729ea5;
+    text-align:left;}
+.tftable tr {background-color:#d4e3e5;}
+.tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #729ea5;}
+.tftable tr:hover {background-color:#ffffff;}
+
+.label {
+float:left;
+width:50opx;
+}
+
+
+
+#Server {
+    width: 130px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #faf7f7;
+    font-size: 16px;
+    color: #1f1b1b;
+}
+
+/* Style the options */
+#Server option {
+    padding: 90px;
+    background-color: #fff;
+    color: rgb(190, 72, 72);
+}
+
+/* Style the options on hover */
+#Server option:hover {
+    background-color: #b06464;
+}
+#Source {
+    width: 130px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #faf7f7;
+    font-size: 16px;
+    color: #1f1b1b;
+}
+
+/* Style the options */
+#Source option {
+    padding: 90px;
+    background-color: #fff;
+    color: rgb(190, 72, 72);
+}
+
+/* Style the options on hover */
+#Source option:hover {
+    background-color: #b06464;
+}
+#de_cont {
+    width: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #faf7f7;
+    font-size: 16px;
+    color: #1f1b1b;
+}
+
+/* Style the options */
+#de_cont option {
+    padding: 90px;
+    background-color: #fff;
+    color: rgb(190, 72, 72);
+}
+
+/* Style the options on hover */
+#de_cont option:hover {
+    background-color: #b06464;
+}
+#mode {
+    width: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #faf7f7;
+    font-size: 16px;
+    color: #1f1b1b;
+}
+
+/* Style the options */
+#mode option {
+    padding: 90px;
+    background-color: #fff;
+    color: rgb(190, 72, 72);
+}
+
+/* Style the options on hover */
+#mode option:hover {
+    background-color: #b06464;
+}
+#ChartBand {
+    width: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #faf7f7;
+    font-size: 16px;
+    color: #1f1b1b;
+}
+
+/* Style the options */
+#ChartBand option {
+    padding: 90px;
+    background-color: #fff;
+    color: rgb(190, 72, 72);
+}
+
+/* Style the options on hover */
+#ChartBand option:hover {
+    background-color: #b06464;
+}
+#dx {
+    width: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #faf7f7;
+    font-size: 16px;
+    color: #1f1b1b;
+}
+#dxcall {
+    width: 80px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #faf7f7;
+    font-size: 16px;
+    color: #1f1b1b;
+}
+#decountry {
+    width: 80px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #faf7f7;
+    font-size: 16px;
+    color: #1f1b1b;
+}
+</style>
+

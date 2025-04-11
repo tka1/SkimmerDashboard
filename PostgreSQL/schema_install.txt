@@ -1,0 +1,158 @@
+CREATE ROLE cluster LOGIN
+  ENCRYPTED PASSWORD 'md52df97743cc3c3e1040bb8540eaab0d92'
+  NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
+
+
+CREATE SCHEMA cluster
+  AUTHORIZATION postgres;
+
+GRANT ALL ON SCHEMA cluster TO postgres;
+GRANT USAGE ON SCHEMA cluster TO cluster;
+
+CREATE TABLE cluster.clustertable
+(
+  title character varying,
+  decall character varying,
+  dxcall character varying,
+  freq numeric,
+  band character varying,
+  country character varying,
+  id serial NOT NULL,
+  sig_noise character varying,
+  datetime timestamp without time zone,
+  insert_time timestamp without time zone DEFAULT now(),
+  mode character varying,
+  de_continent character(2),
+  dx_continent character(2),
+   info character varying,
+   de_country character varying,
+  spotter_continent character varying,
+  skimmode character(2),
+  
+  CONSTRAINT clustertable_pkey PRIMARY KEY (id)
+)
+
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE cluster.clustertable
+  OWNER TO postgres;
+GRANT ALL ON TABLE cluster.clustertable TO postgres;
+GRANT SELECT, UPDATE, INSERT, TRUNCATE, DELETE ON TABLE cluster.clustertable TO cluster;
+
+-- Index: cluster.title_ind
+
+-- DROP INDEX cluster.title_ind;
+
+CREATE INDEX title_ind
+  ON cluster.clustertable
+  USING btree
+  (title COLLATE pg_catalog."default");
+  
+  -- Index: Inserttime_index
+
+-- DROP INDEX IF EXISTS cluster."Inserttime_index";
+
+CREATE INDEX IF NOT EXISTS "Inserttime_index"
+    ON cluster.clustertable USING btree
+    (insert_time ASC NULLS LAST)
+    WITH (deduplicate_items=True)
+    TABLESPACE pg_default;
+   
+
+
+
+CREATE SEQUENCE cluster.dxcc_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 4028
+  CACHE 1;
+ALTER TABLE cluster.dxcc_id_seq
+  OWNER TO postgres;
+GRANT ALL ON SEQUENCE cluster.dxcc_id_seq TO postgres;
+GRANT ALL ON SEQUENCE cluster.dxcc_id_seq TO cluster;
+
+CREATE TABLE cluster.dxcc
+(
+  country character varying,
+  prefix character varying,
+  id serial NOT NULL,
+  cq_zone character varying,
+  itu_zone character varying,
+  continent character varying,
+  lat character varying,
+  "long" character varying,
+  local_time character varying,
+  prim_dxcc_prefix character varying,
+  CONSTRAINT dxcctable_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE cluster.dxcc
+  OWNER TO postgres;
+GRANT ALL ON TABLE cluster.dxcc TO postgres;
+GRANT SELECT, UPDATE, INSERT, TRUNCATE, DELETE ON TABLE cluster.dxcc TO cluster;
+
+-- Index: cluster.prefix_ind
+
+-- DROP INDEX cluster.prefix_ind;
+
+CREATE INDEX prefix_ind
+  ON cluster.dxcc
+  USING btree
+  (prefix COLLATE pg_catalog."default");
+
+CREATE OR REPLACE VIEW cluster.country
+ AS
+ SELECT DISTINCT country,
+    continent,
+    lat,
+    long
+   FROM cluster.dxcc;
+
+ALTER TABLE cluster.country
+    OWNER TO postgres;
+
+GRANT SELECT ON TABLE cluster.country TO PUBLIC;
+GRANT ALL ON TABLE cluster.country TO postgres;
+
+CREATE OR REPLACE VIEW cluster.latestrows_new
+ AS
+ SELECT clustertable.title,
+    clustertable.insert_time,
+    concat('<a href="https://www.qrz.com/db/', clustertable.decall, '"target="_blank">', clustertable.decall, '</a>') AS decall_link,
+    concat('<a href="https://www.qrz.com/db/', clustertable.dxcall, '"target="_blank">', clustertable.dxcall, '</a>') AS dxcall_link,
+       clustertable.sig_noise,
+    clustertable.freq,
+    b.country AS dxcall_country,
+    clustertable.dx_continent,
+    b.lat AS dxcall_lat,
+    b.long AS dxcall_long,
+    c.country AS decall_country,
+    clustertable.de_continent,
+    c.lat AS decall_lat,
+    c.long AS decall_long,
+    clustertable.mode,
+    clustertable.skimmode,
+    clustertable.band,
+	clustertable.decall,
+	clustertable.dxcall
+   FROM cluster.clustertable
+     JOIN cluster.country c ON clustertable.de_country::text = c.country::text
+     FULL JOIN cluster.country b ON clustertable.country::text = b.country::text
+  WHERE clustertable.insert_time >= (now() - '01:00:00'::interval)
+  ORDER BY clustertable.insert_time DESC;
+
+ALTER TABLE cluster.latestrows_new
+    OWNER TO postgres;
+
+GRANT SELECT ON TABLE cluster.latestrows_new TO cluster;
+GRANT ALL ON TABLE cluster.latestrows_new TO postgres;
+  
+
+GRANT  USAGE   ON SCHEMA cluster  TO cluster;
+GRANT SELECT, UPDATE, INSERT, TRUNCATE, DELETE ON TABLE cluster.clustertable TO cluster;
+GRANT USAGE, SELECT ON all sequences in schema cluster TO cluster;
+
