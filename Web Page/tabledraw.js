@@ -8,7 +8,8 @@ function TableDraw() {
   var dx = selectionList("dx")
   var  dxcall = selectionList("dxcall").toUpperCase()
   var DeCountry = selectionList("decountry")
-  console.log(DeCountry);
+  var dxcallcountry = selectionList("dxcallcountry")
+  //console.log(DeCountry);
    //dxcall = dxcall.toUpperCase();
   var HttpClient = function() {
 this.get = function(aUrl, aCallback) {
@@ -25,7 +26,7 @@ anHttpRequest.send( null );
 }
 }
    
-   var theurl='http://'+Server+'/rows2?id='+Source+'&decont=' + de_cont + '&mode='+mode+'&dxfrom='+dx+'&band='+band+'&dxcall='+dxcall + '&decountry='+ DeCountry;
+   var theurl='http://'+Server+'/rows2?id='+Source+'&decont=' + de_cont + '&mode='+mode+'&dxfrom='+dx+'&band='+band+'&dxcall='+dxcall + '&decountry='+ DeCountry+ '&dxcountry='+ dxcallcountry;;
 var client = new HttpClient();
 client.get(theurl, function(response) {
   // console.log(theurl);
