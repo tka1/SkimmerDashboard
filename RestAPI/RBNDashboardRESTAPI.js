@@ -7,8 +7,8 @@ app.get('/people', function (req, res) {
   res.send('hello');
 })
 
-var conString = "postgres://cluster:xxxxxxx!@host.docker.internal:5432/postgres";
-//var conString = "postgres://cluster:xxxxxxxx!@192.168.1.39:5432/postgres";
+var conString = "postgres://cluster:Saturnus1!@host.docker.internal:5432/postgres";
+//var conString = "postgres://cluster:Saturnus1!@192.168.1.39:5432/postgres";
 var client = new pg.Client(conString);
 client.connect(function (err) {
   if (err) {
@@ -27,7 +27,7 @@ client.connect(function (err) {
     var decountry = req.query.decountry;
     
    // client.query("SELECT country as label, kountti as value from cluster.country_count where title =$1 and de_continent = $2 and mode =$3  order by 2 desc", [id2, de_cont, mode], function (err, result) {
-      client.query("SELECT country as label, count(DISTINCT clustertable.dxcall) as value from cluster.clustertable where title =$1 and de_continent = $2 and mode =$3 and clustertable.insert_time >= (now() - '01:00:00'::interval) and de_country like $4 GROUP BY clustertable.country, clustertable.title, clustertable.de_continent, clustertable.mode order by 2 desc", [id2, de_cont, mode, decountry], function (err, result) {
+      client.query("SELECT country as label, count(DISTINCT clustertable.dxcall) as value from cluster.clustertable where title =$1 and de_continent = $2 and mode =$3 and clustertable.datetime >= (now() - '01:00:00'::interval) and de_country like $4 GROUP BY clustertable.country, clustertable.title, clustertable.de_continent, clustertable.mode order by 2 desc", [id2, de_cont, mode, decountry], function (err, result) {
       if (err) {
         return console.error('error running query', err);
       }
@@ -55,7 +55,7 @@ client.connect(function (err) {
     var mode = req.query.mode;
     var decountry = req.query.decountry;
     //client.query("SELECT band as label, kountti as value from cluster.band_count where title = $1 and de_continent = $2 and mode =$3 order by 2 desc", [id2, de_cont, mode], function (err, resul
-      client.query("SELECT band as label, count(DISTINCT clustertable.dxcall) as value from cluster.clustertable where title =$1 and de_continent = $2 and mode =$3 and clustertable.insert_time >= (now() - '01:00:00'::interval) and de_country like $4 GROUP BY clustertable.band, clustertable.title, clustertable.de_continent, clustertable.mode order by 2 desc", [id2, de_cont, mode, decountry], function (err, result)  {
+      client.query("SELECT band as label, count(DISTINCT clustertable.dxcall) as value from cluster.clustertable where title =$1 and de_continent = $2 and mode =$3 and clustertable.datetime >= (now() - '01:00:00'::interval) and de_country like $4 GROUP BY clustertable.band, clustertable.title, clustertable.de_continent, clustertable.mode order by 2 desc", [id2, de_cont, mode, decountry], function (err, result)  {
       if (err) {
         return console.error('error running query', err);
       }
@@ -82,7 +82,7 @@ client.connect(function (err) {
     var band = req.query.band;
     var decountry = req.query.decountry;
     //client.query("SELECT country as label, kountti as value from cluster.country_count2 where title =$1 and de_continent = $2 and mode =$3 and band like $4  order by 2 desc", [id2, de_cont, mode, band], function (err, result) {
-      client.query("SELECT country as label, count(DISTINCT clustertable.dxcall) as value from cluster.clustertable where title =$1 and de_continent = $2 and mode =$3 and band like $4 and clustertable.insert_time >= (now() - '01:00:00'::interval) AND clustertable.skimmode = 'CQ' and de_country like $5 GROUP BY clustertable.country, clustertable.title, clustertable.de_continent, clustertable.mode, clustertable.band  order by 2 desc", [id2, de_cont, mode, band, decountry], function (err, result) {
+      client.query("SELECT country as label, count(DISTINCT clustertable.dxcall) as value from cluster.clustertable where title =$1 and de_continent = $2 and mode =$3 and band like $4 and clustertable.datetime >= (now() - '01:00:00'::interval) AND clustertable.skimmode = 'CQ' and de_country like $5 GROUP BY clustertable.country, clustertable.title, clustertable.de_continent, clustertable.mode, clustertable.band  order by 2 desc", [id2, de_cont, mode, band, decountry], function (err, result) {
       if (err) {
         return console.error('error running query', err);
       }
@@ -111,7 +111,7 @@ client.connect(function (err) {
     var decountry = req.query.decountry;
     //console.log("cumul");
    // client.query("SELECT day_hour as label, spot_count as value from cluster.cumul_spot_count where title = $1 and de_continent = $2 and mode =$3 ", [id2, de_cont, mode, decountry], function (err, result) {
-      client.query("SELECT to_char(clustertable.insert_time, 'dd/HH24'::text) as label, count(DISTINCT clustertable.dxcall) as value from cluster.clustertable where title = $1 and de_continent = $2 and mode =$3 and de_country like $4 and clustertable.insert_time >= (now() - '06:00:00'::interval) GROUP BY (to_char(clustertable.insert_time, 'dd/HH24'::text)), clustertable.title, clustertable.de_continent, clustertable.mode ORDER BY (to_char(clustertable.insert_time, 'dd/HH24'::text)); ", [id2, de_cont, mode, decountry], function (err, result) {
+      client.query("SELECT to_char(clustertable.datetime, 'dd/HH24'::text) as label, count(DISTINCT clustertable.dxcall) as value from cluster.clustertable where title = $1 and de_continent = $2 and mode =$3 and de_country like $4 and clustertable.datetime >= (now() - '06:00:00'::interval) GROUP BY (to_char(clustertable.datetime, 'dd/HH24'::text)), clustertable.title, clustertable.de_continent, clustertable.mode ORDER BY (to_char(clustertable.datetime, 'dd/HH24'::text)); ", [id2, de_cont, mode, decountry], function (err, result) {
       if (err) {
         return console.error('error running query', err);
       }
@@ -191,7 +191,8 @@ client.connect(function (err) {
     }
     else {
       client.query("SELECT * from cluster.latestrows_new where title =$1  and de_continent =$2 and mode = $3 and dx_continent != $4 and band like $5 and decall_country like $6 and dxcall_country like $7   limit 300 ", [id, de_cont, mode, dx_from, band,decountry,dxcountry], function (err, result) {
-        if (err) {
+      //client.query("SELECT datetime,insert_time from cluster.clustertable where title =$1 and de_continent = $2 and mode =$3 and band like $4 and clustertable.insert_time >= (now() - '01:00:00'::interval) AND clustertable.skimmode = 'CQ' and de_country like $5   order by 1 desc limit 10 ", [id, de_cont, mode, band, decountry], function (err, result) {  
+      if (err) {
           return console.error('error running query', err);
         }
         var querydata = [];
@@ -200,7 +201,8 @@ client.connect(function (err) {
                    querydata.push(obj[i]);
                    //console.log(obj[i]);
         }
-        //console.log(querydata);
+       // console.log(obj[1]);
+       //console.log (res.json(querydata));
         retdata =
           res.json(querydata);
              })

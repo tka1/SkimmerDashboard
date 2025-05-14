@@ -9,29 +9,27 @@ CREATE SCHEMA cluster
 GRANT ALL ON SCHEMA cluster TO postgres;
 GRANT USAGE ON SCHEMA cluster TO cluster;
 
-CREATE TABLE cluster.clustertable
+CREATE TABLE IF NOT EXISTS cluster.clustertable
 (
-  title character varying,
-  decall character varying,
-  dxcall character varying,
-  freq numeric,
-  band character varying,
-  country character varying,
-  id serial NOT NULL,
-  sig_noise character varying,
-  datetime timestamp without time zone,
-  insert_time timestamp without time zone DEFAULT now(),
-  mode character varying,
-  de_continent character(2),
-  dx_continent character(2),
-   info character varying,
-   de_country character varying,
-  spotter_continent character varying,
-  skimmode character(2),
-  
-  CONSTRAINT clustertable_pkey PRIMARY KEY (id)
+    title character varying COLLATE pg_catalog."default",
+    decall character varying COLLATE pg_catalog."default",
+    dxcall character varying COLLATE pg_catalog."default",
+    freq numeric,
+    band character varying COLLATE pg_catalog."default",
+    country character varying COLLATE pg_catalog."default",
+    id integer NOT NULL DEFAULT nextval('cluster.clustertable_id_seq'::regclass),
+    sig_noise character varying COLLATE pg_catalog."default",
+    datetime timestamp with time zone DEFAULT CURRENT_TIMESTAMP(0),
+    insert_time timestamp without time zone DEFAULT (now() AT TIME ZONE 'UTC'::text),
+    mode character varying COLLATE pg_catalog."default",
+    de_continent character(2) COLLATE pg_catalog."default",
+    dx_continent character(2) COLLATE pg_catalog."default",
+    info character varying COLLATE pg_catalog."default",
+    de_country character varying COLLATE pg_catalog."default",
+    spotter_continent character varying COLLATE pg_catalog."default",
+    skimmode character(2) COLLATE pg_catalog."default",
+    CONSTRAINT clustertable_pkey PRIMARY KEY (id)
 )
-
 WITH (
   OIDS=FALSE
 );
@@ -121,10 +119,10 @@ GRANT ALL ON TABLE cluster.country TO postgres;
 CREATE OR REPLACE VIEW cluster.latestrows_new
  AS
  SELECT clustertable.title,
-    clustertable.insert_time,
+    clustertable.datetime,
     concat('<a href="https://www.qrz.com/db/', clustertable.decall, '"target="_blank">', clustertable.decall, '</a>') AS decall_link,
     concat('<a href="https://www.qrz.com/db/', clustertable.dxcall, '"target="_blank">', clustertable.dxcall, '</a>') AS dxcall_link,
-       clustertable.sig_noise,
+    clustertable.sig_noise,
     clustertable.freq,
     b.country AS dxcall_country,
     clustertable.dx_continent,
@@ -137,13 +135,13 @@ CREATE OR REPLACE VIEW cluster.latestrows_new
     clustertable.mode,
     clustertable.skimmode,
     clustertable.band,
-	clustertable.decall,
-	clustertable.dxcall
+    clustertable.decall,
+    clustertable.dxcall
    FROM cluster.clustertable
      JOIN cluster.country c ON clustertable.de_country::text = c.country::text
      FULL JOIN cluster.country b ON clustertable.country::text = b.country::text
-  WHERE clustertable.insert_time >= (now() - '01:00:00'::interval)
-  ORDER BY clustertable.insert_time DESC;
+  WHERE clustertable.datetime >= (now() - '01:00:00'::interval)
+  ORDER BY clustertable.datetime DESC;
 
 ALTER TABLE cluster.latestrows_new
     OWNER TO postgres;
