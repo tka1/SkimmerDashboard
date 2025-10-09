@@ -9,6 +9,11 @@ function TableDraw() {
   var  dxcall = selectionList("dxcall").toUpperCase()
   var DeCountry = selectionList("decountry")
   var dxcallcountry = selectionList("dxcallcountry")
+  //console.log(dx)
+  
+
+  var Selection = '<h3> From '+Source+ ' , Band: '+band+ ',  Mode: '+mode+', Receiver continent: '+de_cont+', Station continent: '+dx+'</h3>'
+              document.getElementById('selection').innerHTML = Selection;
   //console.log(DeCountry);
    //dxcall = dxcall.toUpperCase();
   var HttpClient = function() {

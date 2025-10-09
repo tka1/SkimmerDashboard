@@ -28,7 +28,11 @@ anHttpRequest.open( "GET", aUrl, true );
                 var Server = selectionList("Server")
                 var ChartBand = selectionList("ChartBand")
                 var DeCountry = selectionList("decountry")
+               // var dxselection = selectionList("dx")
+               var dxselection = ""
                 //console.log(DeCountry);
+var Selection = '<h3> From '+Source+ ' , Band: '+ChartBand+ ',  mode: '+mode+', Receiver continent '+de_cont+'</h3>'
+              //document.getElementById('selection').innerHTML = Selection;
  
 var theurl='http://'+Server+'/cumul?id='+Source+'&decont='+de_cont+'&mode='+mode+'&decountry='+DeCountry;
 var client = new HttpClient();
