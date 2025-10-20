@@ -187,7 +187,9 @@ public class ClusterEtl {
                                                       Time sqlTime = new Time(now);
                                                       String decallin = (response.substring(5, 16)).trim();
                                                       String decall_trimmed = decallin.replaceAll("[#:-]","");
+                                                      String prefixdecall = "="+decall_trimmed;
                                                       String dxcall = response.substring((response.length()-50), (response.length()-37)).trim();
+                                                      String prefixdxcall = "="+dxcall;
                                                       String de_country = "";
                                                       String finaldxcontinent = "";
                                                       String decontinent = "";
@@ -235,13 +237,15 @@ public class ClusterEtl {
                                                                                                                                                   
                                                      try {
                                                           st = con.createStatement(); 
-                                                          ResultSet rs1 = st.executeQuery ("select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+dxcall+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) as foo");
+                                                          //ResultSet rs1 = st.executeQuery ("select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+dxcall+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) as foo");
+                                                          ResultSet rs1 = st.executeQuery ("select * from(select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+prefixdxcall+"' = dxcc.prefix order by 3 desc limit 1)union select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+dxcall+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) limit 1) as foo");
                                                          while (rs1.next())
                                                          {
                                                             DXcountry = rs1.getString(1);
                                                             finaldxcontinent = rs1.getString(2);
                                                          } rs1.close();
-                                                         ResultSet rs2 = st.executeQuery ("select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+decall_trimmed+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) as foo");
+                                                         //ResultSet rs2 = st.executeQuery ("select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+decall_trimmed+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) as foo");
+                                                         ResultSet rs2 = st.executeQuery ("select * from(select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+prefixdecall+"' = dxcc.prefix order by 3 desc limit 1)union select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+decall_trimmed+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) limit 1) as foo");
                                                          while (rs2.next())
                                                          {
                                                           de_country = rs2.getString(1);
