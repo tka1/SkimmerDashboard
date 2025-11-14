@@ -37,9 +37,7 @@
     <a href="https://www.hamqsl.com/solar.html" title="Click to add Solar-Terrestrial Data to your website!"><img src="https://www.hamqsl.com/solar101pic.php"></a>
     </center>
     -->
-    <body onload="skimmerDataLoad()"> 
-
-
+    <body onload="myFunction()"> 
     
    <div class="topnav"  >
     <a href="#home" class="active">Skimmer dashboard</a>
@@ -51,14 +49,14 @@
 
    </div>
 	 <div class="Menu" >
-          <button onclick="skimmerDataLoad()">Page reload</button>
+          <button onclick="dynamicRefresh()">Page reload dynamically</button>
           &nbsp;&nbsp;
           <button onclick="TableDraw()">Table Reload</button>
           <br />
           <br />
           <div id="menu">
           <label for="Server">DB server &nbsp; </label>
-<select id="Server" name="Server" onchange="skimmerDataLoad()">
+<select id="Server" name="Server" onchange="myFunction()">
      <option value="xx">Select</option>
 <option value="127.0.0.1:54000">Localhost</option>
 <option value="192.168.1.40:54000">Laptop</option>
@@ -68,7 +66,7 @@
 <option value="192.168.1.187:54000">T580</option>
 </select>
 <label for="de_cont">Spotter continent</label>
-<select id="de_cont" name="de_cont" onchange="skimmerDataLoad()">
+<select id="de_cont" name="de_cont" onchange="myFunction()">
 <option value="xx">Select</option>
 <option value="EU">EU</option>
 <option value="NA">NA</option>
@@ -77,9 +75,9 @@
 <option value="OC">OC</option>
 </select>
 <label for="decountry">decountry</label>
-  <input  type="text" id="decountry" name="decountry" value = "xx" onchange="skimmerDataLoad()" >
+  <input  type="text" id="decountry" name="decountry" value = "xx" onchange="myFunction()" >
 <label for="mode">Mode</label>
-<select id="mode" name="mode" onchange="skimmerDataLoad()">
+<select id="mode" name="mode" onchange="myFunction()">
 <option value="xx">Select</option>
 <option value="CW">CW</option>
 <option value="FT4">FT4</option>
@@ -87,7 +85,7 @@
 <option value="RTTY">RTTY</option>
 </select>
 <label for="ChartBand">Band</label>
-<select id="ChartBand" name="ChartBand" onchange="skimmerDataLoad()">
+<select id="ChartBand" name="ChartBand" onchange="myFunction()">
      <option value="xx">Select</option>
 <option value="20M">20M</option>
 <option value="160M">160M</option>
@@ -108,7 +106,7 @@
 <div >
 
      <label for="Source">Source</label>
-     <input  type="text" id="Source" name="Source" value = "xx" onchange="skimmerDataLoad()" >
+     <input  type="text" id="Source" name="Source" value = "xx" onchange="myFunction()" >
 <!--
      <label for="Source">Data source  </label>
 <select id="Source" name="Source" onchange="myFunction()">
@@ -166,11 +164,8 @@ function menuFunction() {
 
 <script>
 function dynamicRefresh(){
-  setInterval(skimmerDataLoad, 15000);
+  setInterval(myFunction, 15000);
   }
-</script>
-      <script>
-    dynamicRefresh();
 </script>
 	  
 	            </body>
