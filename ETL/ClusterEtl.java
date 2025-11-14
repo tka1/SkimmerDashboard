@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -37,12 +38,12 @@ public class ClusterEtl {
     	String clusteraddress = "telnet.reversebeacon.net";
        	String call = "OH2BBT";
     	String Sqluser = "cluster";
-    	String Sqlpass = "Saturnus1!";
-    	String Postgresql_address = "192.168.1.39:5432";
+    	String Sqlpass = "xxxxxxxx";
+    	String Postgresql_address = "192.168.1.187:5432";
     	String DataBase = "postgres";
-    	String skimmerName = "OH2BBT";
+    	String skimmerName = "RBN11";
         String ModeFilter = "xx";
-    	int iport = 7000;
+    	int iport = 7001;
     	// File configFile = new File("src/clusteretl/config.properties");
         File configFile = new File("address.properties");
 
@@ -193,6 +194,8 @@ public class ClusterEtl {
                                                       String de_country = "";
                                                       String finaldxcontinent = "";
                                                       String decontinent = "";
+                                                      String WorkedPrefix = "";
+                                                      String NewCountry = "New";
                                                       String finaldecontinent = decontinent.replace("ll","");
                                                       String freqString= response.substring((response.length()-60), (response.length()-51));
                                                       double freq = Double.parseDouble(freqString.replace(":", ""));
@@ -238,13 +241,23 @@ public class ClusterEtl {
                                                      try {
                                                           st = con.createStatement(); 
                                                           //ResultSet rs1 = st.executeQuery ("select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+dxcall+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) as foo");
-                                                          ResultSet rs1 = st.executeQuery ("select * from(select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+prefixdxcall+"' = dxcc.prefix order by 3 desc limit 1)union select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+dxcall+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) limit 1) as foo");
-                                                         while (rs1.next())
+                                                         // ResultSet rs1 = st.executeQuery ("select * from(select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+prefixdxcall+"' = dxcc.prefix order by 3 desc limit 1)union select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+dxcall+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) limit 1) as foo"); 
+                                                          ResultSet rs1 = st.executeQuery ("select foo.country,foo.continent,foo.prim_dxcc_prefix,coalesce(worked.countryprefix,'New') as worked from(select country,continent,prim_dxcc_prefix from(SELECT  country,continent,length(prim_dxcc_prefix),prim_dxcc_prefix FROM cluster.dxcc where '"+prefixdxcall+"' = dxcc.prefix and prefix !='' order by 3 desc limit 1)union select country,continent,prim_dxcc_prefix from(SELECT  country,continent,length(prim_dxcc_prefix),prim_dxcc_prefix FROM cluster.dxcc where '"+dxcall+"' like concat(dxcc.prefix, '%')and prefix !=''order by 3 desc limit 1) limit 1) as foo left join cluster.countrystat as worked ON trim(leading '*' from UPPER(foo.prim_dxcc_prefix)) = worked.countryprefix limit 1");
+                                                          while (rs1.next())
                                                          {
                                                             DXcountry = rs1.getString(1);
                                                             finaldxcontinent = rs1.getString(2);
+                                                              WorkedPrefix = rs1.getString(4);
+                                                              String CountryString ="New";
+                                                             // NewCountry = WorkedPrefix;
+                                                             if (WorkedPrefix.equals( CountryString)) {
+                                                                  NewCountry ="Yes";
+                                                                         }
+                                                             else {
+                                                                  NewCountry ="No";
+                                                             }
                                                          } rs1.close();
-                                                         //ResultSet rs2 = st.executeQuery ("select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+decall_trimmed+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) as foo");
+                                                         // ResultSet rs2 = st.executeQuery ("select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+decall_trimmed+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) as foo");
                                                          ResultSet rs2 = st.executeQuery ("select * from(select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+prefixdecall+"' = dxcc.prefix order by 3 desc limit 1)union select country,continent from(SELECT  country,continent,length(prefix) FROM cluster.dxcc where '"+decall_trimmed+"' like concat(dxcc.prefix, '%') order by 3 desc limit 1) limit 1) as foo");
                                                          while (rs2.next())
                                                          {
@@ -263,9 +276,9 @@ public class ClusterEtl {
                                                     // write line
                                                     
                                                       
-                                                      System.out.print("  " +  sqlTime+ " de " + decall_trimmed + "\t" + freq + "\t" + dxcall + "\t" + S_N + " db"+ "\t" + mode + "\t" + band + "\t" + DXcountry.trim() + "\n");
+                                                      System.out.print("  " +  sqlTime+ " de " + decall_trimmed + "\t" + freq + "\t" + dxcall + "\t" + S_N + " db"+ "\t" + mode + "\t" + band + "\t" + DXcountry.trim() + "  " + WorkedPrefix + "\n");
                                                                                                                                                                                                                       
-                                                          String stm = "INSERT INTO cluster.clustertable(title, decall, dxcall, freq, band,sig_noise, country, mode, de_continent, dx_continent, de_country, skimmode) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                                                          String stm = "INSERT INTO cluster.clustertable(title, decall, dxcall, freq, band,sig_noise, country, mode, de_continent, dx_continent, de_country, skimmode,new_country) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
                                                           pst = con.prepareStatement(stm);
                                                           pst.setString(1, skimmerName);
                                                           pst.setString(2, decall_trimmed);
@@ -279,6 +292,7 @@ public class ClusterEtl {
                                                           pst.setString(10, finaldxcontinent);
                                                           pst.setString(11, de_country);
                                                           pst.setString(12, Skimmode);
+                                                          pst.setString(13, NewCountry);
                                                           pst.executeUpdate();
                                                                                               
                                                       } catch (SQLException ex) {

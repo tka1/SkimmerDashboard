@@ -75,7 +75,15 @@ Table.innerHTML = "";
                    // If there is any key, which is matching 
                    // with the column name 
                    if (val == null) val = "";  
-                       row.append($('<td/>').html(val)); 
+                    if (response[i].new_country) {
+                      var newCountry = response[i].new_country
+                      //console.log(newCountry);
+                      if (newCountry == "Yes") {
+                       row.append($('<td/ style="color:red;">').html(val)); 
+                     // console.log(newCountry);
+                     }
+                       else {row.append($('<td/>').html(val));}
+                    }
                                           
                } 
               

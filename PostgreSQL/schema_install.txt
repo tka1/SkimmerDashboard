@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS cluster.clustertable
     de_country character varying COLLATE pg_catalog."default",
     spotter_continent character varying COLLATE pg_catalog."default",
     skimmode character(2) COLLATE pg_catalog."default",
+    new_country character varying COLLATE pg_catalog."default",
     CONSTRAINT clustertable_pkey PRIMARY KEY (id)
 )
 WITH (
@@ -136,7 +137,8 @@ CREATE OR REPLACE VIEW cluster.latestrows_new
     clustertable.skimmode,
     clustertable.band,
     clustertable.decall,
-    clustertable.dxcall
+    clustertable.dxcall,
+	 clustertable.new_country
    FROM cluster.clustertable
      JOIN cluster.country c ON clustertable.de_country::text = c.country::text
      FULL JOIN cluster.country b ON clustertable.country::text = b.country::text
@@ -154,3 +156,21 @@ GRANT  USAGE   ON SCHEMA cluster  TO cluster;
 GRANT SELECT, UPDATE, INSERT, TRUNCATE, DELETE ON TABLE cluster.clustertable TO cluster;
 GRANT USAGE, SELECT ON all sequences in schema cluster TO cluster;
 
+CREATE TABLE IF NOT EXISTS cluster.countrystat
+(
+    countryprefix character varying COLLATE pg_catalog."default",
+    "Continent" character varying COLLATE pg_catalog."default",
+    "Band" character varying COLLATE pg_catalog."default",
+    "Mode" character varying COLLATE pg_catalog."default"
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS cluster.countrystat
+    OWNER to postgres;
+
+REVOKE ALL ON TABLE cluster.countrystat FROM cluster;
+
+GRANT TRUNCATE, INSERT, DELETE, SELECT, UPDATE ON TABLE cluster.countrystat TO cluster;
+
+GRANT ALL ON TABLE cluster.countrystat TO postgres;
