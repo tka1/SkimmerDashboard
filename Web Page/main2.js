@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 
- function myFunction() {
+ function skimmerDataLoad() {
+ 
  
          
 var HttpClient = function() {
@@ -242,7 +243,7 @@ function setCookie(cname,cvalue,exdays) {
 
     }
 
-  
+   //setInterval(myFunction(), 5000);
  }
 
 
@@ -289,7 +290,14 @@ function setCookie(cname,cvalue,exdays) {
      iconSize: [20, 20]
      };
  
+       var iconOptions2 = {
+     iconUrl: 'marker2.png',
+     iconSize: [20, 20]
+     };
+
    var customIcon = L.icon(iconOptions);
+   var customIcon2 = L.icon(iconOptions2);
+
    var theurl='http://'+Server+'/latlongcount?id='+Source+'&decont=' + de_cont + '&mode='+mode+ '&band=' + ChartBand+'&decountry='+DeCountry;
    var client = new HttpClient();
 
@@ -303,6 +311,12 @@ function setCookie(cname,cvalue,exdays) {
          draggable: false,
          icon: customIcon
          };
+            var markerOptions2 = {
+         title: response1.data[i].dxcall_country +"  "  + response1.data[i].count,
+         clickable: true,
+         draggable: false,
+         icon: customIcon2
+         };
      var dxcall_lat = response1.data[i].dxcall_lat
      dxcall_lat =Number(dxcall_lat);
      var dxcall_long = response1.data[i].dxcall_long
@@ -312,7 +326,14 @@ function setCookie(cname,cvalue,exdays) {
      var latlong = [];
      latlong.push(dxcall_lat);
      latlong.push(dxcall_long);
-            var marker = L.marker(latlong, markerOptions)
+    var NewCountry2 =  response1.data[i].new_country
+         if (NewCountry2 == "Yes"){
+          var marker = L.marker(latlong, markerOptions2)
+         }
+         else {
+          var marker = L.marker(latlong, markerOptions)
+         }
+            //var marker = L.marker(latlong, markerOptions)
               marker.addTo(map)
    }
    
