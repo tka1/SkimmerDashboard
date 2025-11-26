@@ -1,5 +1,5 @@
 CREATE ROLE cluster LOGIN
-  ENCRYPTED PASSWORD 'md52df97743cc3c3e1040bb8540eaab0d92'
+   PASSWORD 'Saturnus1!'
   NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
 
 
@@ -8,6 +8,21 @@ CREATE SCHEMA cluster
 
 GRANT ALL ON SCHEMA cluster TO postgres;
 GRANT USAGE ON SCHEMA cluster TO cluster;
+
+CREATE SEQUENCE IF NOT EXISTS cluster.clustertable_id_seq
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+
+ALTER SEQUENCE cluster.clustertable_id_seq
+    OWNER TO postgres;
+
+GRANT USAGE, SELECT ON SEQUENCE cluster.clustertable_id_seq TO cluster;
+
+GRANT ALL ON SEQUENCE cluster.clustertable_id_seq TO postgres;
 
 CREATE TABLE IF NOT EXISTS cluster.clustertable
 (
@@ -38,6 +53,10 @@ ALTER TABLE cluster.clustertable
   OWNER TO postgres;
 GRANT ALL ON TABLE cluster.clustertable TO postgres;
 GRANT SELECT, UPDATE, INSERT, TRUNCATE, DELETE ON TABLE cluster.clustertable TO cluster;
+
+
+ALTER SEQUENCE cluster.clustertable_id_seq
+    OWNED BY cluster.clustertable.id;
 
 -- Index: cluster.title_ind
 
@@ -174,3 +193,36 @@ REVOKE ALL ON TABLE cluster.countrystat FROM cluster;
 GRANT TRUNCATE, INSERT, DELETE, SELECT, UPDATE ON TABLE cluster.countrystat TO cluster;
 
 GRANT ALL ON TABLE cluster.countrystat TO postgres;
+
+
+
+CREATE SEQUENCE IF NOT EXISTS cluster.dxcc_id_seq
+    INCREMENT 1
+    START 4028
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1;
+
+ALTER SEQUENCE cluster.dxcc_id_seq
+    OWNER TO postgres;
+
+GRANT ALL ON SEQUENCE cluster.dxcc_id_seq TO cluster;
+
+GRANT ALL ON SEQUENCE cluster.dxcc_id_seq TO postgres;
+
+CREATE SEQUENCE IF NOT EXISTS cluster.dxcc_id_seq1
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 2147483647
+    CACHE 1;
+
+ALTER SEQUENCE cluster.dxcc_id_seq1
+    OWNED BY cluster.dxcc.id;
+
+ALTER SEQUENCE cluster.dxcc_id_seq1
+    OWNER TO postgres;
+
+GRANT USAGE, SELECT ON SEQUENCE cluster.dxcc_id_seq1 TO cluster;
+
+GRANT ALL ON SEQUENCE cluster.dxcc_id_seq1 TO postgres;
