@@ -29,13 +29,10 @@ anHttpRequest.open( "GET", aUrl, true );
                 var Server = selectionList("Server")
                 var ChartBand = selectionList("ChartBand")
                 var DeCountry = selectionList("decountry")
-               // var dxselection = selectionList("dx")
-               var dxselection = ""
-                //console.log(DeCountry);
-var Selection = '<h3> From '+Source+ ' , Band: '+ChartBand+ ',  mode: '+mode+', Receiver continent '+de_cont+'</h3>'
-              //document.getElementById('selection').innerHTML = Selection;
- 
-var theurl='http://'+Server+'/cumul?id='+Source+'&decont='+de_cont+'&mode='+mode+'&decountry='+DeCountry;
+                var skimmode = selectionList("SkimMode")
+
+              
+var theurl='http://'+Server+'/cumul?id='+Source+'&decont='+de_cont+'&mode='+mode+'&decountry='+DeCountry+ '&skimmode='+ skimmode;
 var client = new HttpClient();
 client.get(theurl, function(response){ 
   var response1 = JSON.parse(response);
@@ -74,7 +71,7 @@ client.get(theurl, function(response){
 }	
 );
 
- var theurl='http://'+Server+'/bandcount?id='+Source+'&decont=' + de_cont + '&mode='+mode +'&decountry=' +DeCountry;
+ var theurl='http://'+Server+'/bandcount?id='+Source+'&decont=' + de_cont + '&mode='+mode +'&decountry=' +DeCountry+ '&skimmode='+ skimmode;
 // var theurl='https://jsonplaceholder.typicode.com/todos/1';
 var client = new HttpClient();
 client.get(theurl, function(response) { 
@@ -123,9 +120,9 @@ scales: {
  // });
   const autocolors = window['chartjs-plugin-autocolors'];
   if (ChartBand!="%")
- {var theurl='http://'+Server+'/countrycount2?id='+Source+'&decont=' + de_cont + '&mode=' + mode + '&band=' + ChartBand +'&decountry=' + DeCountry;}
+ {var theurl='http://'+Server+'/countrycount2?id='+Source+'&decont=' + de_cont + '&mode=' + mode + '&band=' + ChartBand +'&decountry=' + DeCountry+ '&skimmode='+ skimmode;}
   else {
-    var theurl='http://'+Server+'/distinctCountry?id='+Source+'&decont=' + de_cont + '&mode=' + mode + '&band=' + ChartBand +'&decountry=' + DeCountry;
+    var theurl='http://'+Server+'/distinctCountry?id='+Source+'&decont=' + de_cont + '&mode=' + mode + '&band=' + ChartBand +'&decountry=' + DeCountry+ '&skimmode='+ skimmode;
   }
 // var theurl='https://jsonplaceholder.typicode.com/todos/1';
 var client = new HttpClient();
@@ -272,6 +269,8 @@ function setCookie(cname,cvalue,exdays) {
    var Server = Server.value;
    var DeCountry = document.getElementById("decountry");
    var DeCountry = DeCountry.value;
+   var skimmode = document.getElementById("SkimMode");
+   var skimmode = skimmode.value;
 
    var container = L.DomUtil.get(document.getElementById('container5'));
     if(container != null){
@@ -298,7 +297,7 @@ function setCookie(cname,cvalue,exdays) {
    var customIcon = L.icon(iconOptions);
    var customIcon2 = L.icon(iconOptions2);
 
-   var theurl='http://'+Server+'/latlongcount?id='+Source+'&decont=' + de_cont + '&mode='+mode+ '&band=' + ChartBand+'&decountry='+DeCountry;
+   var theurl='http://'+Server+'/latlongcount?id='+Source+'&decont=' + de_cont + '&mode='+mode+ '&band=' + ChartBand+'&decountry='+DeCountry+ '&skimmode='+ skimmode;
    var client = new HttpClient();
 
    client.get(theurl, function(response) { 

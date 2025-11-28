@@ -9,10 +9,11 @@ function TableDraw() {
   var  dxcall = selectionList("dxcall").toUpperCase()
   var DeCountry = selectionList("decountry")
   var dxcallcountry = selectionList("dxcallcountry")
+   var skimmode = selectionList("SkimMode")
   //console.log(dx)
   
 
-  var Selection = '<h3> From '+Source+ ' , Band: '+band+ ',  Mode: '+mode+', Receiver continent: '+de_cont+', Station continent: '+dx+'</h3>'
+  var Selection = '<h3> From '+Source+ ' , Band: '+band+ ',  Mode: '+mode+', Receiver continent: '+de_cont+', Station continent: '+dx+ ', skimmode: '+skimmode+'</h3>'
               document.getElementById('selection').innerHTML = Selection;
   //console.log(DeCountry);
    //dxcall = dxcall.toUpperCase();
@@ -31,7 +32,7 @@ anHttpRequest.send( null );
 }
 }
    
-   var theurl='http://'+Server+'/rows2?id='+Source+'&decont=' + de_cont + '&mode='+mode+'&dxfrom='+dx+'&band='+band+'&dxcall='+dxcall + '&decountry='+ DeCountry+ '&dxcountry='+ dxcallcountry;;
+   var theurl='http://'+Server+'/rows2?id='+Source+'&decont=' + de_cont + '&mode='+mode+'&dxfrom='+dx+'&band='+band+'&dxcall='+dxcall + '&decountry='+ DeCountry+ '&dxcountry='+ dxcallcountry+ '&skimmode='+ skimmode;;
 var client = new HttpClient();
 client.get(theurl, function(response) {
   // console.log(theurl);
