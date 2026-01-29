@@ -110,7 +110,14 @@ width:50opx;
   color: white;
 }
 
-
+.icon {
+            width: 62px;
+            height: 62px;
+            background-image: url('icons/menu.png'); /* Local path */
+            background-size: 70%;
+            background-repeat: no-repeat;
+            display: inline-block;
+        }
 
 
 #Server {
@@ -261,6 +268,7 @@ width:50opx;
     border-radius: 5px;
     background-color: #faf7f7;
     font-size: 16px;
-    color: #1f1b1b;
-</style>
+    color: #1f1b1b;}
+    
 
+ 

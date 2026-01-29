@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+
+<html lang="en">
+   <head>
+         <title>Skimmer Dashboard </title>
+       <link href="style/style.css" type="text/css" rel="stylesheet" /> 
+	 <!---- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />-->
+<meta http-equiv="Cache-Control" content="content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script src="node_modules/chart.js/dist/chart.umd.js"></script>
+<!--
+script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ -->
+    
+<!--
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    --> 
+   <link rel="stylesheet" href="leaflet/leaflet.css" />
+<script src="leaflet/leaflet.js"></script>
+
+   <script src="main2.js"></script>
+   <script src="tabledraw.js"></script>
+   </head>
+   <!--
+   <center>
+    <a href="https://www.hamqsl.com/solar.html" title="Click to add Solar-Terrestrial Data to your website!"><img src="https://www.hamqsl.com/solar101pic.php"></a>
+    </center>
+    -->
+    <body onload="skimmerDataLoad()"> 
+
+
+    
+   <div class="topnav"  >
+    <a href="#home" class="active">Skimmer dashboard</a>
+     <a href="javascript:void(0);" class="icon" onclick="menuFunction()">
+    <i class="icon2" ></i>
+  </a>
+   </div>
+   <div class="selection" id="selection">
+
+   </div>
+	 <div class="Menu" >
+          <button onclick="skimmerDataLoad()">Page reload</button>
+          &nbsp;&nbsp;
+          <button onclick="TableDraw()">Table Reload</button>
+          <br />
+          <br />
+          <div id="menu">
+          <label for="Server">DB server &nbsp; </label>
+<select id="Server" name="Server" onchange="skimmerDataLoad()">
+     <option value="xx">Select</option>
+<option value="127.0.0.1:54000">Localhost</option>
+<option value="192.168.1.40:54000">Laptop</option>
+<option value="192.168.1.88:54000">Raspberry5</option>
+<option value="192.168.1.37:54000">AMD</option>
+<option value="192.168.1.240:54000">T490S</option>
+<option value="192.168.1.187:54000">T580</option>
+</select>
+<label for="de_cont">Spotter continent</label>
+<select id="de_cont" name="de_cont" onchange="skimmerDataLoad()">
+<option value="xx">Select</option>
+<option value="EU">EU</option>
+<option value="NA">NA</option>
+<option value="SA">SA</option>
+<option value="AS">AS</option>
+<option value="OC">OC</option>
+</select>
+<label for="decountry">decountry</label>
+  <input  type="text" id="decountry" name="decountry" value = "xx" onchange="skimmerDataLoad()" >
+<label for="mode">Mode</label>
+<select id="mode" name="mode" onchange="skimmerDataLoad()">
+<option value="xx">Select</option>
+<option value="CW">CW</option>
+<option value="FT4">FT4</option>
+<option value="FT8">FT8</option>
+<option value="RTTY">RTTY</option>
+</select>
+<label for="ChartBand">Band</label>
+<select id="ChartBand" name="ChartBand" onchange="skimmerDataLoad()">
+     <option value="xx">Select</option>
+<option value="20M">20M</option>
+<option value="160M">160M</option>
+<option value="80M">80M</option>
+<option value="40M">40M</option>
+<option value="30M">30M</option>
+<option value="17M">17M</option>
+<option value="15M">15M</option>
+<option value="12M">12M</option>
+<option value="10M">10M</option>
+<option value="6M">6M</option>
+<option value="60M">60M</option>
+<option value="none">none</option>
+<option value="2M">2M</option>
+<option value="%">%</option>
+</select>
+<label for="Countries">Countries</label>
+<select id="Countries" name="Countries" onchange="skimmerDataLoad()">
+     <option value="xx">Select</option>
+<option value="ALL">ALL</option>
+<option value="New">New</option>
+</select>
+<label for="SkimMode">SkimMode</label>
+<select id="SkimMode" name="SkimMode" onchange="skimmerDataLoad()">
+     <option value="xx">Select</option>
+<option value="CQ">CQ</option>
+<option value="ALL">ALL</option>
+<option value="DE">DE</option>
+
+</select>
+<div >
+
+     <label for="Source">Source</label>
+     <input  type="text" id="Source" name="Source" value = "xx" onchange="skimmerDataLoad()" >
+
+</select>
+<label for="dx">Table filter &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>	
+<select id="dx" onchange="TableDraw()" >
+ <option value="xx">Select</option>
+ <option value="ALL">ALL</option>
+ <option value="DX">DX</option>
+ 
+   </select>  
+  <label for="dxcall">dxcall</label>
+  <input  type="text" id="dxcall" name="dxcall" value = "xx" onchange="TableDraw()" >
+  <label for="dxcallcountry">dxcall country</label>
+  <input  type="text" id="dxcallcountry" name="dxcallcountry" value = "xx" onchange="TableDraw()" ><br><br>
+<br />
+
+</div>  
+
+</div>
+
+</div>  
+
+
+<canvas class="label"  id="container"  style="width: 390px; height: 280px"></canvas>
+<canvas class="label"  id="container2"  style="width: 390px; height: 280px"></canvas>
+<div class="label"  id = "container5" style = "width: 785px; height: 400px;"></div>
+<canvas class="label"  id="container3"  style="width: 390px; height: 380px"></canvas>
+    		
+       
+       <div<table   id='tbl' border=1></table>
+        <table class="tftable" align = "left"
+            id="table" border="1"> 
+    </table> 
+              </div>
+	  
+      </div>
+     
+
+      <script>
+function menuFunction() {
+  var x = document.getElementById("menu");
+    if (x.style.display === "block") {
+    x.style.display = "none";
+  } else {
+    x.style.display = "block";
+  }
+}
+</script>
+
+<script>
+function dynamicRefresh(){
+  setInterval(skimmerDataLoad, 15000);
+  }
+</script>
+      <script>
+    dynamicRefresh();
+</script>
+	  
+	            </body>
+                        </html>
+
